@@ -1,0 +1,47 @@
+<!-- templates/result_verify.html -->
+{% extends "base.html" %}
+{% block content %}
+<h1>Kết quả xác thực ảnh</h1>
+
+<div class="card">
+    <p>
+        <span class="status-badge status-{{ status }}">
+            {% if status == "VALID" %}
+            HỢP LỆ
+            {% elif status == "TAMPERED" %}
+            ĐÃ CHỈNH SỬA
+            {% else %}
+            KHÔNG TÌM THẤY
+            {% endif %}
+        </span>
+    </p>
+
+    <p><strong>Image Hash:</strong><br>{{ image_hash }}</p>
+
+    {% if record %}
+    <h3>Thông tin lưu trên sổ cái (mock)</h3>
+    <p><strong>Watermark Hash (on-chain):</strong><br>{{ record.watermark_hash }}</p>
+    <p><strong>Thời gian ghi:</strong><br>{{ record.timestamp }}</p>
+
+    <h3>Tác giả</h3>
+    <p><strong>Tên:</strong> {{ record.author.name }}</p>
+    <p><strong>Email:</strong> {{ record.author.email }}</p>
+    <p><strong>Link:</strong> {{ record.author.link }}</p>
+
+    {% if extracted_text %}
+    <h3>Watermark trích từ ảnh</h3>
+    <div class="message">
+        {{ extracted_text }}
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <div class="message" style="margin-top:15px;">
+        {{ message }}
+    </div>
+</div>
+
+<p style="margin-top:20px;">
+    <a href="{{ url_for('index') }}"><button>⬅ Quay lại trang chính</button></a>
+</p>
+{% endblock %}

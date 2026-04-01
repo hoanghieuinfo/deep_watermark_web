@@ -1,0 +1,50 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Hệ thống xác thực hình ảnh bằng watermark và  blockchain </h1>
+
+<div class="row">
+    <div class="card">
+        <h2>1️⃣ Nhúng watermark & đăng ký bản quyền</h2>
+        <form action="{{ url_for('embed') }}" method="post" enctype="multipart/form-data">
+            <div class="field-group">
+                <label>Chọn ảnh gốc:</label>
+                <input type="file" name="image" accept="image/*" required>
+            </div>
+
+            <div class="field-group">
+                <label>Watermark (text):</label>
+                <textarea name="watermark_text" rows="3" placeholder="VD: © 2025 - Tác giả A" required></textarea>
+            </div>
+
+            <div class="field-group">
+                <label>Tên tác giả:</label>
+                <input type="text" name="author_name" placeholder="Nguyễn Văn A">
+            </div>
+
+            <div class="field-group">
+                <label>Email:</label>
+                <input type="email" name="author_email" placeholder="tacgia@example.com">
+            </div>
+
+            <div class="field-group">
+                <label>Link / Website:</label>
+                <input type="text" name="author_link" placeholder="https://portfolio.com/...">
+            </div>
+
+            <button type="submit">Nhúng watermark & ghi vào sổ cái (mock)</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>2️⃣ Xác thực ảnh & truy xuất nguồn gốc</h2>
+        <form action="{{ url_for('verify') }}" method="post" enctype="multipart/form-data">
+            <div class="field-group">
+                <label>Chọn ảnh cần xác minh:</label>
+                <input type="file" name="image" accept="image/*" required>
+            </div>
+            <button type="submit">Xác thực ảnh</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
