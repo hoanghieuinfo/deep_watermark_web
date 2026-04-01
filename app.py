@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, send_file, redirect, url_for,
 from werkzeug.utils import secure_filename
 from io import BytesIO
 
-from watermark import embed_watermark_lsb, extract_watermark_lsb
+from deep_watermark_web.watermark import embed_watermark_lsb, extract_watermark_lsb
 import blockchain_mock as bc
 
 UPLOAD_FOLDER = "static/uploads"
