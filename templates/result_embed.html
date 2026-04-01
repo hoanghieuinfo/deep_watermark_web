@@ -1,1 +1,35 @@
 
+<!-- templates/result_embed.html -->
+{% extends "base.html" %}
+{% block content %}
+<h1>Kết quả nhúng watermark</h1>
+
+<div class="row">
+    <div class="card">
+        <h2>Ảnh sau khi nhúng watermark</h2>
+        <img src="{{ image_url }}" alt="Watermarked image">
+        <p>
+            <a href="{{ url_for('download_file', filename=image_url.split('uploads/')[1]) }}">
+                <button>Tải ảnh watermarked</button>
+            </a>
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Thông tin ghi trên sổ cái (blockchain mock)</h2>
+        <p><strong>Tx Hash (giả lập):</strong><br>{{ tx_hash }}</p>
+        <p><strong>Image Hash:</strong><br>{{ record.image_hash }}</p>
+        <p><strong>Watermark Hash:</strong><br>{{ record.watermark_hash }}</p>
+        <p><strong>Thời gian ghi:</strong><br>{{ record.timestamp }}</p>
+
+        <h3>Tác giả</h3>
+        <p><strong>Tên:</strong> {{ record.author.name }}</p>
+        <p><strong>Email:</strong> {{ record.author.email }}</p>
+        <p><strong>Link:</strong> {{ record.author.link }}</p>
+    </div>
+</div>
+
+<p style="margin-top:20px;">
+    <a href="{{ url_for('index') }}"><button>⬅ Quay lại trang chính</button></a>
+</p>
+{% endblock %}
