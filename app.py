@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 from io import BytesIO
 
 from deep_watermark_web.watermark import embed_watermark_lsb, extract_watermark_lsb
-import blockchain_mock as bc
+from deep_watermark_web import blockchain_mock as bc
 
 UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
