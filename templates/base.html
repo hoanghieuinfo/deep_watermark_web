@@ -8,7 +8,185 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
     <style>
-        /* Loading spinner styles */
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* Main Container */
+        .page-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        /* Typography */
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        /* Grid Layout */
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Cards */
+        .card {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 600;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        /* Form Elements */
+        .field-group {
+            margin-bottom: 20px;
+        }
+        
+        .field-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .field-group input,
+        .field-group textarea,
+        .field-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        .field-group input:focus,
+        .field-group textarea:focus,
+        .field-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .field-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .field-group small {
+            display: block;
+            margin-top: 5px;
+            color: #888;
+            font-size: 12px;
+        }
+        
+        /* Buttons */
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        /* Flash Messages */
+        .flash {
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .flash.success {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+        
+        .flash.error {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .flash.info {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+        }
+        
+        /* Loading Overlay */
         .loading-overlay {
             display: none;
             position: fixed;
@@ -16,7 +194,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 9999;
             justify-content: center;
             align-items: center;
@@ -24,10 +202,10 @@
         }
         
         .loading-spinner {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
+            border-top: 5px solid #667eea;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 20px;
@@ -40,34 +218,155 @@
         
         .loading-text {
             color: white;
-            font-size: 16px;
+            font-size: 18px;
             font-family: Arial, sans-serif;
+            margin-top: 10px;
         }
         
-        .flash {
+        /* Result Page Styles */
+        .result-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .result-container h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .result-container h3 {
+            color: #555;
+            margin: 15px 0 10px 0;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #e9ecef;
+        }
+        
+        .hash-info {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            background: #f1f3f5;
             padding: 10px;
+            border-radius: 6px;
+            word-break: break-all;
             margin: 10px 0;
-            border-radius: 5px;
-            background-color: #f0f0f0;
-            border-left: 4px solid #3498db;
         }
         
-        .flash.success {
-            background-color: #d4edda;
-            border-left-color: #28a745;
-            color: #155724;
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
         }
         
-        .flash.error {
-            background-color: #f8d7da;
-            border-left-color: #dc3545;
-            color: #721c24;
+        .status-VALID {
+            background: #28a745;
+            color: white;
         }
         
-        .flash.info {
-            background-color: #d1ecf1;
-            border-left-color: #17a2b8;
-            color: #0c5460;
+        .status-TAMPERED {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .status-NOT_FOUND {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .button-group a {
+            flex: 1;
+            text-decoration: none;
+        }
+        
+        .button-group button {
+            background: #6c757d;
+        }
+        
+        .button-group button.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Image Preview */
+        .image-preview {
+            max-width: 100%;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Helper Classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-20 {
+            margin-top: 20px;
+        }
+        
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .card h2 {
+                font-size: 18px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+        
+        /* Custom file input */
+        input[type="file"] {
+            padding: 8px;
+            background: white;
+        }
+        
+        input[type="file"]::-webkit-file-upload-button {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        input[type="file"]::-webkit-file-upload-button:hover {
+            background: #5a67d8;
         }
     </style>
 </head>
@@ -111,6 +410,30 @@
                 alert('Xử lý quá lâu. Vui lòng thử lại với ảnh nhỏ hơn.');
             }
         }, 30000);
+        
+        // Preview image before upload
+        function previewImage(input, previewId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById(previewId);
+                    if (preview) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        // Add image preview functionality
+        const imageInputs = document.querySelectorAll('input[type="file"]');
+        imageInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const previewId = this.id + 'Preview';
+                previewImage(this, previewId);
+            });
+        });
     </script>
 </body>
 </html>
