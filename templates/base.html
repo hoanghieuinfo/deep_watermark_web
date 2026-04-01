@@ -1,26 +1,116 @@
-
 <!doctype html>
 <html lang="vi">
 <head>
     <meta charset="utf-8">
     <title>Demo Watermark và Blockchain</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        /* Loading spinner styles */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .flash {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .flash.success {
+            background-color: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+        
+        .flash.error {
+            background-color: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .flash.info {
+            background-color: #d1ecf1;
+            border-left-color: #17a2b8;
+            color: #0c5460;
+        }
+    </style>
 </head>
 <body>
     <div class="page-wrapper">
         <div class="container">
-            {% with messages = get_flashed_messages() %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-            {% for m in messages %}
-            <div class="flash">{{ m }}</div>
-            {% endfor %}
+                {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
             {% endif %}
             {% endwith %}
             {% block content %}{% endblock %}
         </div>
     </div>
+    
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Đang xử lý, vui lòng chờ...</div>
+        <div class="loading-text" style="font-size: 12px; margin-top: 10px;">Ảnh lớn có thể mất vài giây</div>
+    </div>
+    
+    <script>
+        // Hiển thị loading khi submit form
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    document.getElementById('loadingOverlay').style.display = 'flex';
+                });
+            });
+        });
+        
+        // Ẩn loading sau 30 giây (tránh bị treo vĩnh viễn)
+        setTimeout(function() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay.style.display === 'flex') {
+                overlay.style.display = 'none';
+                alert('Xử lý quá lâu. Vui lòng thử lại với ảnh nhỏ hơn.');
+            }
+        }, 30000);
+    </script>
 </body>
 </html>
